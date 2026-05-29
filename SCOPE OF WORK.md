@@ -1,118 +1,118 @@
-Local Software Intelligence Agent — Scoped Roadmap
+# Local Software Intelligence Agent - Scoped Roadmap
 
-Vision
+## Vision
 
 Build a fully local software intelligence agent capable of understanding:
 
-* source code
-* documentation
-* configurations
-* architecture
-* git history
-* operational patterns
+* Source code
+* Documentation
+* Configurations
+* Architecture
+* Git history
+* Operational patterns
 * ML pipelines
 
 The system should answer natural language developer questions using:
 
-* semantic retrieval
-* symbolic search
+* Semantic retrieval
+* Symbolic search
 * AST analysis
-* git intelligence
-* lightweight reasoning
+* Git intelligence
+* Lightweight reasoning
 
 The system is intentionally designed for:
 
-* local/offline usage
-* privacy-sensitive repositories
-* low-resource machines
-* micro-LLM / SLM inference
-* deterministic retrieval-first architecture
+* Local/offline usage
+* Privacy-sensitive repositories
+* Low-resource machines
+* Micro-LLM / SLM inference
+* Deterministic retrieval-first architecture
 
-⸻
+---
 
-1. Core Product Principles
+# 1. Core Product Principles
 
-Local Only
+## Local Only
 
 The system must:
 
-* never send code externally
-* work completely offline
-* use local embeddings
-* use local LLM inference only
-* support air-gapped environments
+* Never send code externally
+* Work completely offline
+* Use local embeddings
+* Use local LLM inference only
+* Support air-gapped environments
 
-⸻
+---
 
-Retrieval First, LLM Second
+## Retrieval First, LLM Second
 
 The architecture should prioritize:
 
-1. deterministic retrieval
-2. symbolic indexing
+1. Deterministic retrieval
+2. Symbolic indexing
 3. AST understanding
-4. graph traversal
-5. git metadata
+4. Graph traversal
+5. Git metadata
 
 LLM reasoning should only synthesize results.
 
 The LLM should NOT:
 
-* crawl repositories directly
-* brute-force search files
-* hallucinate architecture
+* Crawl repositories directly
+* Brute-force search files
+* Hallucinate architecture
 
-⸻
+---
 
-Small Model Requirement (Important)
+## Small Model Requirement (Important)
 
-The system MUST work with:
+The system MUST work with micro LLMs / SLMs.
 
-Micro LLMs / SLMs
+### Examples
 
-Examples:
+| Model               | Class       |
+| ------------------- | ----------- |
+| Qwen2.5 1.5B        | Micro       |
+| Qwen2.5 3B          | SLM         |
+| Phi-3 Mini          | SLM         |
+| Gemma 2B            | Micro       |
+| TinyLlama           | Tiny        |
+| DeepSeek Coder 1.3B | Micro       |
+| SmolLM              | Ultra-small |
 
-Model	Class
-Qwen2.5 1.5B	Micro
-Qwen2.5 3B	SLM
-Phi-3 Mini	SLM
-Gemma 2B	Micro
-TinyLlama	Tiny
-DeepSeek Coder 1.3B	Micro
-SmolLM	Ultra-small
+---
 
-⸻
-
-Why Small Models?
+## Why Small Models?
 
 Because most intelligence comes from:
 
-* indexing
-* retrieval
-* metadata
+* Indexing
+* Retrieval
+* Metadata
 * AST analysis
-* git context
+* Git context
 
-NOT from giant reasoning models.
+Not from giant reasoning models.
 
 The LLM only needs to:
 
-* summarize
-* rank
-* explain
-* synthesize
+* Summarize
+* Rank
+* Explain
+* Synthesize
 
 This dramatically reduces:
 
-* memory
-* latency
-* hardware requirements
-* hallucinations
+* Memory
+* Latency
+* Hardware requirements
+* Hallucinations
 
-⸻
+---
 
-2. High-Level Architecture
+# 2. High-Level Architecture
 
+```text
                 ┌─────────────────────┐
                 │ CLI / Claude Agent  │
                 └──────────┬──────────┘
@@ -137,66 +137,72 @@ This dramatically reduces:
                 ┌─────────▼─────────┐
                 │ Micro LLM / SLM   │
                 └───────────────────┘
+```
 
-⸻
+---
 
-3. Supported Question Categories
+# 3. Supported Question Categories
 
 The roadmap is organized around the types of questions the agent must answer.
 
-⸻
+---
 
-PHASE 1 — Foundational Repository Search
+# PHASE 1 - Foundational Repository Search
 
-Goal
+## Goal
 
 Enable intelligent local retrieval over:
 
-* code
-* markdown
-* configs
-* documents
+* Code
+* Markdown
+* Configs
+* Documents
 
 This phase answers:
 
-“Where is X?”
+> "Where is X?"
 
 without deep reasoning.
 
-⸻
+---
 
-Capabilities
+## Capabilities
 
-Filesystem Scanning
+### Filesystem Scanning
 
-* recursive scanning
-* incremental indexing
-* file metadata storage
-* chunk extraction
+* Recursive scanning
+* Incremental indexing
+* File metadata storage
+* Chunk extraction
 
-⸻
+---
 
-Ignore / Allow Rules
+### Ignore / Allow Rules
 
 Support:
 
+```yaml
 ignore:
   - node_modules/**
   - .git/**
   - dist/**
+```
 
 and:
 
+```yaml
 mode: allowlist
+
 allow:
   - apps/**
   - docs/**
+```
 
-⸻
+---
 
-Hybrid Search
+## Hybrid Search
 
-Semantic Search
+### Semantic Search
 
 Questions like:
 
@@ -204,9 +210,9 @@ Questions like:
 * Where are deployment docs?
 * Find docs mentioning OAuth
 
-⸻
+---
 
-Exact / FTS Search
+### Exact / FTS Search
 
 Questions like:
 
@@ -214,346 +220,350 @@ Questions like:
 * Which files mention Kafka?
 * Where is JWT configured?
 
-⸻
+---
 
-Questions Answered in Phase 1
+## Questions Answered in Phase 1
 
-Document Discovery
+### Document Discovery
 
 * Find yesterday’s standup report
 * Find onboarding docs
 * Where are deployment steps documented?
 * Which markdown files mention OAuth?
 
-⸻
+---
 
-Config Discovery
+### Config Discovery
 
 * Where is Redis configured?
 * Which services use PostgreSQL?
 * Where are timeouts configured?
 * Which configs contain API keys?
 
-⸻
+---
 
-Secret Discovery
+### Secret Discovery
 
 * Where is OpenAI secret key stored?
 * Are any AWS keys hardcoded?
 * Which files contain private certificates?
 
-⸻
+---
 
-API / Text Search
+### API / Text Search
 
 * Which services mention Kafka topic X?
-* Where is endpoint /refund defined?
+* Where is endpoint `/refund` defined?
 * Which files reference environment variable X?
 
-⸻
+---
 
-Required Technologies
+## Required Technologies
 
-Concern	Recommendation
-Vector DB	LanceDB
-FTS	SQLite FTS5
-Embeddings	bge-small-en
-Chunking	function/section based
-Watchers	watchdog
+| Concern    | Recommendation         |
+| ---------- | ---------------------- |
+| Vector DB  | LanceDB                |
+| FTS        | SQLite FTS5            |
+| Embeddings | bge-small-en           |
+| Chunking   | Function/section based |
+| Watchers   | watchdog               |
 
-⸻
+---
 
-PHASE 2 — Code Structure Intelligence
+# PHASE 2 - Code Structure Intelligence
 
-Goal
+## Goal
 
 Understand code structure and symbols.
 
 This phase answers:
 
-“What code implements X?”
+> "What code implements X?"
 
-⸻
+---
 
-Capabilities
+## Capabilities
 
-AST Parsing
+### AST Parsing
 
 Use:
 
 * tree-sitter
-* language-aware parsing
+* Language-aware parsing
 
-⸻
+---
 
-Symbol Extraction
-
-Track:
-
-* classes
-* functions
-* interfaces
-* imports
-* constants
-* configs
-
-⸻
-
-Relationship Mapping
+### Symbol Extraction
 
 Track:
 
-* imports
-* inheritance
-* usage references
-* call references
+* Classes
+* Functions
+* Interfaces
+* Imports
+* Constants
+* Configs
 
-⸻
+---
 
-Questions Answered in Phase 2
+### Relationship Mapping
 
-Implementation Discovery
+Track:
+
+* Imports
+* Inheritance
+* Usage references
+* Call references
+
+---
+
+## Questions Answered in Phase 2
+
+### Implementation Discovery
 
 * How is PAN detection implemented?
 * Where is retry logic implemented?
 * Which services publish Kafka events?
 * How does authentication work?
 
-⸻
+---
 
-Utility Discovery
+### Utility Discovery
 
-* Any common code for any → int conversion?
+* Any common code for `any → int` conversion?
 * Where is caching implemented?
 * Which files implement validation?
 
-⸻
+---
 
-Dependency Analysis
+### Dependency Analysis
 
 * Which services depend on module X?
 * What uses this DTO?
 * Which files import utility Y?
 * Is this function unused?
 
-⸻
+---
 
-API Discovery
+### API Discovery
 
 * Which APIs require authentication?
 * Where are GraphQL resolvers?
 * Which services expose gRPC endpoints?
 
-⸻
+---
 
-Architecture Questions
+### Architecture Questions
 
 * What is entry point for service X?
 * Which services are involved in checkout flow?
 * How does request tracing propagate?
 
-⸻
+---
 
-Required Technologies
+## Required Technologies
 
-Concern	Recommendation
-Parsing	tree-sitter
-Symbol DB	SQLite
-Graph	lightweight adjacency store
-Search	hybrid semantic + symbolic
+| Concern   | Recommendation              |
+| --------- | --------------------------- |
+| Parsing   | tree-sitter                 |
+| Symbol DB | SQLite                      |
+| Graph     | Lightweight adjacency store |
+| Search    | Hybrid semantic + symbolic  |
 
-⸻
+---
 
-PHASE 3 — Git & Historical Intelligence
+# PHASE 3 - Git & Historical Intelligence
 
-Goal
+## Goal
 
 Understand:
 
-* changes
-* ownership
-* evolution
-* releases
+* Changes
+* Ownership
+* Evolution
+* Releases
 
 This phase answers:
 
-“Who changed X and when?”
+> "Who changed X and when?"
 
-⸻
+---
 
-Capabilities
+## Capabilities
 
-Git Metadata
+### Git Metadata
 
 Support:
 
-* git log
-* git blame
-* branch discovery
-* commit summaries
+* `git log`
+* `git blame`
+* Branch discovery
+* Commit summaries
 
-⸻
+---
 
-Change Tracking
+### Change Tracking
 
 Track:
 
-* modified files
-* ownership
-* frequency
-* release relationships
+* Modified files
+* Ownership
+* Frequency
+* Release relationships
 
-⸻
+---
 
-Questions Answered in Phase 3
+## Questions Answered in Phase 3
 
-Release Intelligence
+### Release Intelligence
 
 * What is last release branch of application X?
 * Which release introduced API v2?
 * What changed between release 2.1 and 2.3?
 
-⸻
+---
 
-Ownership
+### Ownership
 
 * Who modified this config most often?
 * Who introduced this bug?
 * Who owns payment module?
 
-⸻
+---
 
-Historical Queries
+### Historical Queries
 
 * When was config X changed?
 * Which commits touched fraud detection?
 * When was retry logic added?
 
-⸻
+---
 
-Repository Evolution
+### Repository Evolution
 
 * Which files change most frequently?
 * Which modules are unstable?
 * What areas changed heavily this month?
 
-⸻
+---
 
-Required Technologies
+## Required Technologies
 
-Concern	Recommendation
-Git library	pygit2
-Metadata cache	SQLite
-Diff parser	git native
+| Concern        | Recommendation |
+| -------------- | -------------- |
+| Git library    | pygit2         |
+| Metadata cache | SQLite         |
+| Diff parser    | Git native     |
 
-⸻
+---
 
-PHASE 4 — Architectural & Semantic Reasoning
+# PHASE 4 - Architectural & Semantic Reasoning
 
-Goal
+## Goal
 
 Provide system-level understanding.
 
 This phase answers:
 
-“Explain how the system works.”
+> "Explain how the system works."
 
-⸻
+---
 
-Capabilities
+## Capabilities
 
-Semantic Flow Reconstruction
+### Semantic Flow Reconstruction
 
 Build:
 
-* execution traces
-* dependency graphs
-* service relationships
+* Execution traces
+* Dependency graphs
+* Service relationships
 
-⸻
+---
 
-Multi-hop Retrieval
+### Multi-hop Retrieval
 
 Follow:
 
-* imports
-* references
-* service calls
-* event chains
+* Imports
+* References
+* Service calls
+* Event chains
 
-⸻
+---
 
-Context Synthesis
+### Context Synthesis
 
 Use micro-LLM for:
 
-* explanations
-* summaries
-* architecture understanding
+* Explanations
+* Summaries
+* Architecture understanding
 
-⸻
+---
 
-Questions Answered in Phase 4
+## Questions Answered in Phase 4
 
-System Understanding
+### System Understanding
 
 * How does checkout work end-to-end?
 * Which services participate in onboarding?
 * How is request tracing implemented?
 * What triggers invoice generation?
 
-⸻
+---
 
-Operational Intelligence
+### Operational Intelligence
 
 * Where are retries implemented?
 * Which services have health checks?
 * Where is rate limiting implemented?
 * Which code suppresses exceptions?
 
-⸻
+---
 
-ML / AI Understanding
+### ML / AI Understanding
 
 * Which models use XGBoost?
 * What features are used in fraud model?
 * Where are prompts stored?
 * How is RAG implemented?
 
-⸻
+---
 
-Runtime & Observability
+### Runtime & Observability
 
 * Where are logs emitted?
 * Which services use OpenTelemetry?
 * Where are metrics defined?
 
-⸻
+---
 
-Required Technologies
+## Required Technologies
 
-Concern	Recommendation
-Graph traversal	NetworkX/lightweight graph
-Re-ranking	hybrid scoring
-Summarization	small local LLM
+| Concern         | Recommendation             |
+| --------------- | -------------------------- |
+| Graph traversal | NetworkX/lightweight graph |
+| Re-ranking      | Hybrid scoring             |
+| Summarization   | Small local LLM            |
 
-⸻
+---
 
-PHASE 5 — Pattern & Quality Intelligence
+# PHASE 5 - Pattern & Quality Intelligence
 
-Goal
+## Goal
 
 Understand software quality and patterns.
 
 This phase answers:
 
-“How good or maintainable is this system?”
+> "How good or maintainable is this system?"
 
-⸻
+---
 
-Capabilities
+## Capabilities
 
-Pattern Detection
+### Pattern Detection
 
 Detect:
 
@@ -561,134 +571,138 @@ Detect:
 * Factory pattern
 * Repository pattern
 * CQRS
-* middleware chains
+* Middleware chains
 
-⸻
+---
 
-Smell Detection
+### Smell Detection
 
 Identify:
 
-* duplicate logic
-* dead code
-* oversized classes
-* cyclic dependencies
-* risky modules
+* Duplicate logic
+* Dead code
+* Oversized classes
+* Cyclic dependencies
+* Risky modules
 
-⸻
+---
 
-Questions Answered in Phase 5
+## Questions Answered in Phase 5
 
-Pattern Discovery
+### Pattern Discovery
 
 * Any references to Strategy pattern?
 * Where are decorators used?
 * Which modules use CQRS?
 
-⸻
+---
 
-Quality Analysis
+### Quality Analysis
 
 * Which modules violate SRP?
 * Where is duplicate retry logic?
 * Which functions are overly complex?
 * Which code is tightly coupled?
 
-⸻
+---
 
-Refactoring Assistance
+### Refactoring Assistance
 
 * What breaks if module X is removed?
 * Which utilities are duplicated?
 * Which APIs are deprecated?
 
-⸻
+---
 
-Required Technologies
+## Required Technologies
 
-Concern	Recommendation
-AST heuristics	custom
-Graph analysis	dependency graph
-Similarity	embedding clustering
+| Concern        | Recommendation       |
+| -------------- | -------------------- |
+| AST heuristics | Custom               |
+| Graph analysis | Dependency graph     |
+| Similarity     | Embedding clustering |
 
-⸻
+---
 
-PHASE 6 — Advanced Software Intelligence (Future)
+# PHASE 6 - Advanced Software Intelligence (Future)
 
-Goal
+## Goal
 
 Move toward intelligent repository reasoning.
 
-⸻
+---
 
-Questions Answered
+## Questions Answered
 
-High-Level Reasoning
+### High-Level Reasoning
 
-* Explain checkout architecture to new developer.
-* Compare authentication across services.
-* Suggest best place to add caching.
-* Identify risky upgrade areas.
-* Find inconsistent validation logic.
+* Explain checkout architecture to new developer
+* Compare authentication across services
+* Suggest best place to add caching
+* Identify risky upgrade areas
+* Find inconsistent validation logic
 
-⸻
+---
 
-Cross-Repository Intelligence
+### Cross-Repository Intelligence
 
 * Which repos use shared auth SDK?
 * Which services still use API v1?
 * Which repos depend on common package X?
 
-⸻
+---
 
-Predictive Intelligence
+### Predictive Intelligence
 
 * Which modules are most fragile?
 * Which files likely cause outages?
 * Which code paths lack observability?
 
-⸻
+---
 
-4. Recommended Local Models
+# 4. Recommended Local Models
 
-Embeddings
+## Embeddings
 
-Model	Notes
-bge-small-en	best balance
-nomic-embed-text	strong semantic retrieval
-e5-small	lightweight
+| Model            | Notes                     |
+| ---------------- | ------------------------- |
+| bge-small-en     | Best balance              |
+| nomic-embed-text | Strong semantic retrieval |
+| e5-small         | Lightweight               |
 
-⸻
+---
 
-Generation Models
+## Generation Models
 
-Model	Use
-Qwen2.5 1.5B	default
-Phi-3 Mini	strong reasoning
-Gemma 2B	lightweight
-TinyLlama	ultra-fast
-DeepSeek Coder 1.3B	code-focused
+| Model               | Use              |
+| ------------------- | ---------------- |
+| Qwen2.5 1.5B        | Default          |
+| Phi-3 Mini          | Strong reasoning |
+| Gemma 2B            | Lightweight      |
+| TinyLlama           | Ultra-fast       |
+| DeepSeek Coder 1.3B | Code-focused     |
 
-⸻
+---
 
-5. Critical Design Principle
+# 5. Critical Design Principle
 
 The system succeeds because:
 
-* retrieval is strong
-* indexing is rich
-* metadata is structured
+* Retrieval is strong
+* Indexing is rich
+* Metadata is structured
 
-NOT because the LLM is large.
+Not because the LLM is large.
 
 This architecture intentionally minimizes dependence on:
 
-* giant context windows
-* expensive inference
-* cloud reasoning
+* Giant context windows
+* Expensive inference
+* Cloud reasoning
 
 The ideal flow is:
 
+```text
 Repository Intelligence
         ↓
 Structured Retrieval
@@ -698,24 +712,27 @@ Focused Context
 Small Local Model
         ↓
 Concise Answer
+```
 
-⸻
+---
 
-6. Recommended MVP
+# 6. Recommended MVP
 
-Absolute MVP
+## Absolute MVP
 
-Must Have
+### Must Have
 
-* filesystem indexing
-* ignore/allow rules
-* semantic search
-* exact search
-* line references
-* local embeddings
-* incremental indexing
+* Filesystem indexing
+* Ignore/allow rules
+* Semantic search
+* Exact search
+* Line references
+* Local embeddings
+* Incremental indexing
 
-First Valuable Questions
+---
+
+## First Valuable Questions
 
 * Where is OpenAI key stored?
 * Find yesterday standup report
@@ -723,30 +740,30 @@ First Valuable Questions
 * What config uses Redis?
 * Which files mention Kafka?
 
-⸻
+---
 
-7. Long-Term Positioning
+# 7. Long-Term Positioning
 
 This is NOT:
 
-* a chatbot over code
-* a simple vector search app
+* A chatbot over code
+* A simple vector search app
 
 It is:
 
-A Local Software Intelligence System
+> A Local Software Intelligence System
 
 focused on:
 
-* repository understanding
-* architectural reasoning
-* developer productivity
-* operational awareness
-* private/offline environments
+* Repository understanding
+* Architectural reasoning
+* Developer productivity
+* Operational awareness
+* Private/offline environments
 
 using:
 
-* micro-LLMs
-* deterministic retrieval
-* structured indexing
-* lightweight reasoning.
+* Micro-LLMs
+* Deterministic retrieval
+* Structured indexing
+* Lightweight reasoning
